@@ -323,12 +323,6 @@
             const startingRevenue = startingRevenueInput.value.trim();
             const timeline = timelineInput.value.trim();
             const changes = companyChangesInput.value.trim();
-            
-            // Validate that the key has been replaced (not just the placeholder)
-            if (apiKey === 'AIzaSyDx5SF5GaWEBefSbVI_yCfXy3Zpw1DNa-g') {
-                resultsDiv.innerHTML = '<p class="text-red-500">Error: Please edit the script to replace **PASTE_YOUR_GEMINI_API_KEY_HERE** with your actual Gemini API Key.</p>';
-                return;
-            }
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
