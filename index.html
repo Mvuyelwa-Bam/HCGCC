@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+is my script fixed? <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -139,7 +139,7 @@
 
                 <!-- Empty Column for spacing since API key input was removed -->
                 <div>
-                    <p class="text-sm text-gray-400 mt-2 italic">Grounding is enabled via Google Search for real-time market data.</p>
+                    <p class="text-sm text-gray-400 mt-2 italic">Remember to embedd api key later for demo's</p>
                 </div>
 
                 <!-- Strategic Plan Input (Spanning all 4 columns) -->
@@ -188,8 +188,10 @@
     </div>
 
     <script type="module">
-        // The API key is set to an empty string for the execution environment to provide it at runtime.
-        const GEMINI_API_KEY = "";
+        // --- IMPORTANT: PASTE YOUR GEMINI API KEY HERE ---
+        // Warning: Hardcoding keys exposes them publicly. Only do this for personal, static apps.
+        const GEMINI_API_KEY = 'AIzaSyDx5SF5GaWEBefSbVI_yCfXy3Zpw1DNa-g';
+        // -------------------------------------------------
         
         // UI Element references
         const analyzeButton = document.getElementById('analyze-button');
@@ -213,7 +215,7 @@
         2. **Financial Impact Simulation:** Before the factor breakdown, create a section titled "Financial Impact Simulation & Metrics (Pre/Post-Strategy)." This section MUST:
            - Clearly state the input Starting Revenue and the Strategic Timeline (in years).
            - **Pragmatically Project** the **Ending Revenue** after the specified timeline based on the strategic plan's viability, market conditions, **challenges discovered in step 1**, and risks. The projection must be realistic, potentially showing negative growth if the plan is highly flawed or risky.
-           - Calculate the Compound Annual Growth Rate (CAGR) required to achieve the projected ending revenue over the timeline, using **LaTeX formatting** for the formula: $$CAGR = (\\frac{Ending Revenue}{Starting Revenue})^{\\frac{1}{Years}} - 1$$
+           - Calculate the Compound Annual Growth Rate (CAGR) required to achieve the projected ending revenue over the timeline, using **LaTeX formatting** for the formula: $\$CAGR = (\\frac{Ending Revenue}{Starting Revenue})^{\\frac{1}{Years}} - 1$.
            - Present the key metrics in a highly structured, presentation-ready bulleted list to simulate a "Before" and "Projected After" table.
         
         3. **The Nine Core Strategic Factors:** Analyze the user's proposed strategic changes and predict the projected impact on the following nine critical HCGCC factors. The analysis must explicitly factor in **market adaptation capability** and general competitive dynamics. For each factor, you must provide:
@@ -226,7 +228,7 @@
         1. Competitive Advantage (Differentiation & Moat)
         2. Financial Viability (Profitability & Returns on Investment)
         3. Scalability & Growth Potential (Market Expansion)
-          4. Operational Excellence (Efficiency & Supply Chain Resilience)
+        4. Operational Excellence (Efficiency & Supply Chain Resilience)
         5. Technological Innovation (Future-proofing & Disruption potential)
         6. Market Penetration Strategy (Reach, Customer Acquisition, and Retention)
         7. Risk Mitigation & Resilience (Handling external shocks, regulatory changes)
@@ -244,64 +246,54 @@
 
         /**
          * Converts Markdown text to HTML for rendering, suitable for the light theme.
-         * NOTE: This is a simplified Markdown to HTML converter.
          * @param {string} markdownText
          * @returns {string} HTML content
          */
         function markdownToHtml(markdownText) {
             let html = markdownText;
             
-            // Handle LaTeX (Block Math)
-            html = html.replace(/\$\$(.*?)\$\$/gs, (match, p1) => `<p class="text-center my-4 p-3 bg-gray-100 border border-gray-200 rounded-lg text-lg overflow-x-auto">$$${p1.trim()}$$</p>`);
-
-            // Convert headings
+            // Convert headings to h2/h3 (handled by CSS for styling)
             html = html.replace(/^##\s*(.*)$/gm, (match, p1) => `<h2>${p1.trim()}</h2>`);
             html = html.replace(/^#\s*(.*)$/gm, (match, p1) => `<h3>${p1.trim()}</h3>`);
-            
-            // Convert bullet points
-            let lines = html.split('\n');
-            let inList = false;
-            let processedLines = [];
 
-            for (const line of lines) {
-                if (line.trim().startsWith('* ')) {
-                    if (!inList) {
-                        processedLines.push('<ul>');
-                        inList = true;
+            // Convert bullet points to ul/li
+            html = html.replace(/^\*\s*(.*)$/gm, (match, p1) => `<li>${p1.trim()}</li>`);
+            if (html.includes('<li>')) {
+                // Simple list wrap logic
+                const listItems = html.split('<li>').slice(1);
+                html = '<ul>' + listItems.map(item => `<li>${item.replace(/\n\n/g, '').trim()}</li>`).join('') + '</ul>';
+                // Attempt to re-integrate paragraphs and headings around the list
+                html = markdownText.split('\n\n').map(p => {
+                    if (p.startsWith('*')) {
+                        return p.split('\n').filter(l => l.trim()).map(l => l.replace(/^\*\s*/, '<li>').trim()).join('');
                     }
-                    processedLines.push(`<li>${line.trim().substring(2).trim()}</li>`);
-                } else {
-                    if (inList) {
-                        processedLines.push('</ul>');
-                        inList = false;
+                    if (p.startsWith('##')) return `<h2>${p.replace(/^##\s*/, '').trim()}</h2>`;
+                    if (p.startsWith('#')) return `<h3>${p.replace(/^#\s*/, '').trim()}</h3>`;
+                    if (p.trim()) return `<p>${p.trim().replace(/\n/g, ' ')}</p>`;
+                    return '';
+                }).join('');
+                
+                // Final clean-up for lists
+                html = html.replace(/<li>(.*?)(?=<li>|<\/ul>)/gs, '<li>$1</li>');
+                html = html.replace(/<\/li><\/ul><ul>/g, '</li></ul><ul>');
+                html = html.replace(/<p><li>/g, '<ul><li>');
+                html = html.replace(/<\/li><\/p>/g, '</li></ul>');
+            } else {
+                // Convert remaining newlines not within headings to paragraphs
+                html = html.split('\n\n').map(p => {
+                    if (p.trim() && !p.startsWith('<h')) {
+                        return `<p>${p.trim().replace(/\n/g, ' ')}</p>`;
                     }
-                    processedLines.push(line);
-                }
+                    return p;
+                }).join('');
             }
-            if (inList) {
-                processedLines.push('</ul>');
-            }
-            html = processedLines.join('\n');
-
-            // Convert paragraphs (remaining text separated by double newlines)
-            html = html.split('\n\n').map(p => {
-                if (p.trim() && !p.startsWith('<h') && !p.startsWith('<u')) {
-                    return `<p>${p.trim().replace(/\n/g, ' ')}</p>`;
-                }
-                return p;
-            }).join('');
 
             // Convert bold text
             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
-            // Final cleanup for any list/paragraph overlaps
-            html = html.replace(/<p><ul>/g, '<ul>').replace(/<\/ul><\/p>/g, '</ul>');
-            html = html.replace(/\n/g, ''); // Remove remaining newlines
-
             return html;
         }
 
-        // Function to handle API call with exponential backoff
         async function fetchWithBackoff(url, options, maxRetries = 5) {
             for (let attempt = 0; attempt < maxRetries; attempt++) {
                 try {
@@ -326,12 +318,18 @@
         }
 
         window.handleSubmission = async () => {
-            const apiKey = GEMINI_API_KEY; // Key is now pulled from the empty variable
+            const apiKey = GEMINI_API_KEY; // Key is now pulled from the hardcoded variable
             const companyName = companyNameInput.value.trim();
             const startingRevenue = startingRevenueInput.value.trim();
             const timeline = timelineInput.value.trim();
             const changes = companyChangesInput.value.trim();
             
+            // Validate that the key has been replaced (not just the placeholder)
+            if (apiKey === 'AIzaSyDx5SF5GaWEBefSbVI_yCfXy3Zpw1DNa-g') {
+                resultsDiv.innerHTML = '<p class="text-red-500">Error: Please edit the script to replace **PASTE_YOUR_GEMINI_API_KEY_HERE** with your actual Gemini API Key.</p>';
+                return;
+            }
+
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             // Input Validations
