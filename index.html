@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCGCC Strategic Blueprint Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'hcgcc-bg': '#F7F9FA', // Very Light Blue/Gray
+                        'hcgcc-card': 'white', // White card background
+                        'hcgcc-accent': '#0056B3', // Deep Professional Blue (for contrast/primary)
+                        'hcgcc-glow': '#00BFFF', // Electric Blue (for futuristic touch/highlights)
+                        'hcgcc-text': '#1F2937', // Dark Gray text
+                        'hcgcc-success': '#216E39', // Subtle Green for success/viability
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght{100..900}&display=swap');
+        
+        body {
+            background-color: #F7F9FA;
+        }
+
+        /* Custom styles for a light, professional look */
+        .container-card {
+            box-shadow: 0 15px 30px rgba(0, 86, 179, 0.1), 0 5px 15px rgba(0, 86, 179, 0.05);
+            background-color: white;
+            border: 1px solid #E5E7EB; 
+        }
+
+        .hcgcc-button {
+            transition: all 0.3s ease-in-out;
+            background-color: #0056B3; /* Deep Blue */
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.3);
+        }
+
+        .hcgcc-button:hover {
+            background-color: #004494; /* Darker Blue */
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .input-field {
+            background-color: white;
+            border: 1px solid #D1D5DB;
+            color: #1F2937;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #00BFFF;
+            box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.5);
+        }
+
+        /* Styling for the model's markdown output */
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0056B3; /* Deep Blue */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            border-bottom: 2px solid #00BFFF; /* Electric Blue Accent */
+            padding-bottom: 0.25rem;
+        }
+
+        .markdown-content p, .markdown-content li {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            color: #374151; /* Medium Dark Gray */
+        }
+
+        .markdown-content strong {
+            color: #0056B3;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 font-sans">
+
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Header -->
+        <header class="text-hcgcc-text border-b-4 border-hcgcc-glow pb-4 mb-8">
+            <h1 class="text-3xl md:text-5xl font-extrabold flex items-center tracking-tight text-hcgcc-accent">
+                <svg class="w-8 h-8 md:w-10 md:h-10 mr-3 text-hcgcc-glow" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-3.88-5.74a.75.75 0 001.06 1.06l2.35-2.35 2.35 2.35a.75.75 0 001.06-1.06l-3-3a.75.75 0 00-1.06 0l-3 3z" clip-rule="evenodd"></path></svg>
+                HCGCC Strategic Blueprint Analyzer
+            </h1>
+            <p class="text-lg text-gray-600 mt-3">AI-driven assessment of your case strategy across Nine Core Competitive Factors.</p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="container-card p-6 md:p-10 rounded-xl">
+            
+            <!-- Input Area - Now a 4-column grid -->
+            <section class="mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+                
+                <!-- Company Name Input (1A) -->
+                <div>
+                    <label for="company-name" class="block text-xl font-semibold mb-3 text-hcgcc-accent">
+                        1A. Case Company Name
+                    </label>
+                    <input type="text" id="company-name" 
+                            class="input-field w-full p-4 rounded-lg text-lg placeholder-gray-400 transition-all" 
+                            placeholder="e.g., Tesla, Inc." required>
+                    <p class="text-sm text-gray-500 mt-2">Required for contextual, industry-specific analysis.</p>
+                </div>
+
+                <!-- Starting Revenue Input (1B) -->
+                <div>
+                    <label for="starting-revenue" class="block text-xl font-semibold mb-3 text-hcgcc-accent">
+                        1B. Starting Revenue (Current, $B)
+                    </label>
+                    <input type="number" id="starting-revenue" 
+                            class="input-field w-full p-4 rounded-lg text-lg placeholder-gray-400 transition-all" 
+                            placeholder="e.g., 96.8 (in Billions)" required>
+                    <p class="text-sm text-gray-500 mt-2">Current annual revenue (e.g., enter 96.8 for $96.8B).</p>
+                </div>
+
+                <!-- Strategic Timeline Input (1C) -->
+                <div>
+                    <label for="timeline" class="block text-xl font-semibold mb-3 text-hcgcc-accent">
+                        1C. Strategic Timeline (Years)
+                    </label>
+                    <input type="number" id="timeline" 
+                            class="input-field w-full p-4 rounded-lg text-lg placeholder-gray-400 transition-all" 
+                            placeholder="e.g., 3 (for 3 years)" required>
+                    <p class="text-sm text-gray-500 mt-2">The duration of the strategic plan execution.</p>
+                </div>
+
+                <!-- Empty Column for spacing since API key input was removed -->
+                <div>
+                    <p class="text-sm text-gray-400 mt-2 italic">API Key is embedded in the script.</p>
+                </div>
+
+                <!-- Strategic Plan Input (Spanning all 4 columns) -->
+                <div class="md:col-span-4">
+                    <label for="company-changes" class="block text-xl font-semibold mb-3 text-hcgcc-accent">
+                        1D. Detail Your Proposed Strategic Innovations & Execution Plan
+                    </label>
+                    <textarea id="company-changes" 
+                              class="input-field w-full p-5 rounded-lg text-hcgcc-text placeholder-gray-400 transition-all shadow-inner" 
+                              rows="8" 
+                              placeholder="Example: 'We will pivot to a decentralized platform model, investing $500M in blockchain R&D. Our target demographic is Gen Z in SE Asia. This increases our Competitive Advantage via a network effect, but introduces Regulatory Risk and requires a complete overhaul of our Organizational Structure. Our primary goal is Sustainable Growth and Operational Excellence over Q1-Q4.'"></textarea>
+                    <p class="text-sm text-gray-500 mt-2">Be detailed about the changes, market, resources, and timeline.</p>
+                </div>
+            </section>
+
+            <!-- Action Button -->
+            <div class="flex justify-center mt-6">
+                <button id="analyze-button" onclick="handleSubmission()" 
+                        class="hcgcc-button font-extrabold py-4 px-10 rounded-full text-xl hover:bg-hcgcc-accent/90 disabled:opacity-50 flex items-center">
+                    <span id="button-text">GENERATE HCGCC STRATEGIC ASSESSMENT</span>
+                    <svg id="spinner" class="animate-spin -ml-1 mr-3 h-6 w-6 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Results Area -->
+            <section class="mt-16 pt-8 border-t border-gray-200">
+                <h2 class="text-3xl font-bold mb-6 text-hcgcc-accent">
+                    2. AI Competitive Factor Scores
+                </h2>
+                <div id="results" class="markdown-content min-h-[150px] p-6 bg-hcgcc-bg rounded-lg border border-gray-300 text-hcgcc-text">
+                    <p class="text-gray-500 italic">
+                        The AI will provide a deep analysis, including projected scores (1-10) and percentage change impacts for the **Nine Core Strategic Factors** based on your submission.
+                    </p>
+                </div>
+
+                <!-- Sources Area -->
+                <div id="sources-container" class="mt-8 hidden">
+                    <h3 class="text-lg font-semibold mb-3 text-hcgcc-accent">Grounding Sources (AI Research)</h3>
+                    <ul id="sources-list" class="list-disc ml-5 text-sm text-gray-600 space-y-2"></ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- IMPORTANT: PASTE YOUR GEMINI API KEY HERE ---
+        // Warning: Hardcoding keys exposes them publicly. Only do this for personal, static apps.
+        const GEMINI_API_KEY = 'PASTE_YOUR_GEMINI_API_KEY_HERE';
+        // -------------------------------------------------
+        
+        // UI Element references
+        const analyzeButton = document.getElementById('analyze-button');
+        const buttonText = document.getElementById('button-text');
+        const spinner = document.getElementById('spinner');
+        const resultsDiv = document.getElementById('results');
+        const sourcesContainer = document.getElementById('sources-container');
+        const sourcesList = document.getElementById('sources-list');
+        const companyNameInput = document.getElementById('company-name');
+        const startingRevenueInput = document.getElementById('starting-revenue');
+        const timelineInput = document.getElementById('timeline');
+        const companyChangesInput = document.getElementById('company-changes');
+
+        // --- HCGCC-SPECIFIC SYSTEM PROMPT ---
+        const SYSTEM_PROMPT = `You are a Senior Strategy Consultant for the Harvard Crimson Global Case Competition (HCGCC) team. Your role is to critically assess a proposed strategic plan for a case study company, regardless of its industry.
+        
+        Your response MUST be grounded by real-world data and market analysis.
+        
+        1. **Company Context & Challenges:** Use the provided company name, financial data, and strategic changes to infer the company's industry and status. Use Google Search to find relevant background information, **current industry challenges (regulatory environment, competitive pressure)**, and macroeconomic trends that will affect the execution of the plan.
+        
+        2. **Financial Impact Simulation:** Before the factor breakdown, create a section titled "Financial Impact Simulation & Metrics (Pre/Post-Strategy)." This section MUST:
+           - Clearly state the input Starting Revenue and the Strategic Timeline (in years).
+           - **Pragmatically Project** the **Ending Revenue** after the specified timeline based on the strategic plan's viability, market conditions, **challenges discovered in step 1**, and risks. The projection must be realistic, potentially showing negative growth if the plan is highly flawed or risky.
+           - Calculate the Compound Annual Growth Rate (CAGR) required to achieve the projected ending revenue over the timeline, using **LaTeX formatting** for the formula: $\$CAGR = (\\frac{Ending Revenue}{Starting Revenue})^{\\frac{1}{Years}} - 1$.
+           - Present the key metrics in a highly structured, presentation-ready bulleted list to simulate a "Before" and "Projected After" table.
+        
+        3. **The Nine Core Strategic Factors:** Analyze the user's proposed strategic changes and predict the projected impact on the following nine critical HCGCC factors. The analysis must explicitly factor in **market adaptation capability** and general competitive dynamics. For each factor, you must provide:
+           - A **Projected Score** (1-10, where 10 is excellent performance/impact).
+           - A **Percentage Change** (% improvement/decline in value/impact).
+           
+           The breakdown must start with a bold header for the factor and immediately follow with the score and change in a clear, parenthetical format.
+        
+        **The Nine Factors are:**
+        1. Competitive Advantage (Differentiation & Moat)
+        2. Financial Viability (Profitability & Returns on Investment)
+        3. Scalability & Growth Potential (Market Expansion)
+        4. Operational Excellence (Efficiency & Supply Chain Resilience)
+        5. Technological Innovation (Future-proofing & Disruption potential)
+        6. Market Penetration Strategy (Reach, Customer Acquisition, and Retention)
+        7. Risk Mitigation & Resilience (Handling external shocks, regulatory changes)
+        8. Environmental, Social, and Governance (ESG) Impact (Sustainability & Ethics)
+        9. Organizational Structure & Talent (Ability to execute the plan)
+        
+        4. **Output Format:** Provide a structured, professional report.
+           - Start with a single-paragraph Executive Summary tailored to the company name.
+           - Follow with the "Financial Impact Simulation & Metrics (Pre/Post-Strategy)" section.
+           - Create a dedicated section titled "Competitive Factor Breakdown" that discusses the score and change for all nine factors, ensuring clear and concise justification.
+           - Conclude with "Key Recommendations for HCGCC Submission."
+        
+        Maintain a formal, precise, and highly analytical tone, suitable for a professional case competition.`;
+        // ------------------------------------
+
+        /**
+         * Converts Markdown text to HTML for rendering, suitable for the light theme.
+         * @param {string} markdownText
+         * @returns {string} HTML content
+         */
+        function markdownToHtml(markdownText) {
+            let html = markdownText;
+            
+            // Convert headings to h2/h3 (handled by CSS for styling)
+            html = html.replace(/^##\s*(.*)$/gm, (match, p1) => `<h2>${p1.trim()}</h2>`);
+            html = html.replace(/^#\s*(.*)$/gm, (match, p1) => `<h3>${p1.trim()}</h3>`);
+
+            // Convert bullet points to ul/li
+            html = html.replace(/^\*\s*(.*)$/gm, (match, p1) => `<li>${p1.trim()}</li>`);
+            if (html.includes('<li>')) {
+                // Simple list wrap logic
+                const listItems = html.split('<li>').slice(1);
+                html = '<ul>' + listItems.map(item => `<li>${item.replace(/\n\n/g, '').trim()}</li>`).join('') + '</ul>';
+                // Attempt to re-integrate paragraphs and headings around the list
+                html = markdownText.split('\n\n').map(p => {
+                    if (p.startsWith('*')) {
+                        return p.split('\n').filter(l => l.trim()).map(l => l.replace(/^\*\s*/, '<li>').trim()).join('');
+                    }
+                    if (p.startsWith('##')) return `<h2>${p.replace(/^##\s*/, '').trim()}</h2>`;
+                    if (p.startsWith('#')) return `<h3>${p.replace(/^#\s*/, '').trim()}</h3>`;
+                    if (p.trim()) return `<p>${p.trim().replace(/\n/g, ' ')}</p>`;
+                    return '';
+                }).join('');
+                
+                // Final clean-up for lists
+                html = html.replace(/<li>(.*?)(?=<li>|<\/ul>)/gs, '<li>$1</li>');
+                html = html.replace(/<\/li><\/ul><ul>/g, '</li></ul><ul>');
+                html = html.replace(/<p><li>/g, '<ul><li>');
+                html = html.replace(/<\/li><\/p>/g, '</li></ul>');
+            } else {
+                // Convert remaining newlines not within headings to paragraphs
+                html = html.split('\n\n').map(p => {
+                    if (p.trim() && !p.startsWith('<h')) {
+                        return `<p>${p.trim().replace(/\n/g, ' ')}</p>`;
+                    }
+                    return p;
+                }).join('');
+            }
+
+            // Convert bold text
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            return html;
+        }
+
+        async function fetchWithBackoff(url, options, maxRetries = 5) {
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status !== 429 && response.ok) {
+                        return response;
+                    }
+                    if (response.status === 429 && attempt < maxRetries - 1) {
+                        const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    throw new Error(`API failed with status: ${response.status}`);
+                } catch (error) {
+                    if (attempt === maxRetries - 1) {
+                        throw new Error(`Fetch failed after ${maxRetries} attempts: ${error.message}`);
+                    }
+                    const delay = Math.pow(2, attempt) * 1000 + Math.random() * 500;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        window.handleSubmission = async () => {
+            const apiKey = GEMINI_API_KEY; // Key is now pulled from the hardcoded variable
+            const companyName = companyNameInput.value.trim();
+            const startingRevenue = startingRevenueInput.value.trim();
+            const timeline = timelineInput.value.trim();
+            const changes = companyChangesInput.value.trim();
+            
+            // Validate that the key has been replaced (not just the placeholder)
+            if (apiKey === 'AIzaSyDx5SF5GaWEBefSbVI_yCfXy3Zpw1DNa-g') {
+                resultsDiv.innerHTML = '<p class="text-red-500">Error: Please edit the script to replace **PASTE_YOUR_GEMINI_API_KEY_HERE** with your actual Gemini API Key.</p>';
+                return;
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+            // Input Validations
+            if (!companyName) {
+                resultsDiv.innerHTML = '<p class="text-red-500">Please enter the **Case Company Name** to begin the analysis.</p>';
+                return;
+            }
+            if (!startingRevenue || isNaN(parseFloat(startingRevenue)) || parseFloat(startingRevenue) <= 0) {
+                 resultsDiv.innerHTML = '<p class="text-red-500">Please enter a valid **Starting Revenue** (a positive number).</p>';
+                return;
+            }
+            
+            const timelineNumber = parseInt(timeline);
+            if (!timeline || isNaN(timelineNumber) || timelineNumber <= 0 || timelineNumber > 10) {
+                resultsDiv.innerHTML = '<p class="text-red-500">Please enter a valid **Strategic Timeline** (a whole number between 1 and 10).</p>';
+                return;
+            }
+
+            if (changes.length < 50) {
+                resultsDiv.innerHTML = '<p class="text-red-500">Please provide a more detailed strategic plan (minimum 50 characters) for a meaningful HCGCC analysis.</p>';
+                return;
+            }
+
+            // Set loading state
+            analyzeButton.disabled = true;
+            buttonText.textContent = 'Analyzing...';
+            spinner.classList.remove('hidden');
+            resultsDiv.innerHTML = `<p class="text-hcgcc-accent">Running comprehensive strategic assessment for **${companyName}**...</p>`;
+            sourcesContainer.classList.add('hidden');
+            sourcesList.innerHTML = '';
+
+            const userQuery = `Analyze the strategic changes and execution plan for the company "${companyName}".
+                Financial context: Starting Annual Revenue is $${startingRevenue} Billion. Strategic Timeline is ${timelineNumber} years.
+                Innovations: ${changes}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+            };
+
+            try {
+                const response = await fetchWithBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (!candidate || !candidate.content?.parts?.[0]?.text) {
+                    throw new Error("Analysis failed. The model did not return a valid response.");
+                }
+
+                const rawText = candidate.content.parts[0].text;
+                
+                // 1. Display formatted analysis
+                resultsDiv.innerHTML = markdownToHtml(rawText);
+
+                // 2. Extract and display grounding sources
+                let extractedSources = [];
+                const groundingMetadata = candidate.groundingMetadata;
+                if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                    extractedSources = groundingMetadata.groundingAttributions
+                        .map(attribution => ({
+                            uri: attribution.web?.uri,
+                            title: attribution.web?.title,
+                        }))
+                        .filter(source => source.uri && source.title);
+                }
+
+                if (extractedSources.length > 0) {
+                    sourcesList.innerHTML = extractedSources.map(source => 
+                        `<li><a href="${source.uri}" target="_blank" rel="noopener noreferrer" class="text-hcgcc-glow hover:text-hcgcc-accent transition duration-150 truncate block">${source.title} (${new URL(source.uri).hostname})</a></li>`
+                    ).join('');
+                    sourcesContainer.classList.remove('hidden');
+                }
+
+            } catch (e) {
+                console.error("HCGCC Analysis Error:", e);
+                resultsDiv.innerHTML = `<p class="text-red-500">Error: Failed to perform strategic analysis. Please check your network connection or try a different prompt.</p><p class="text-red-500 text-sm mt-2">${e.message}</p>`;
+            } finally {
+                // Reset loading state
+                analyzeButton.disabled = false;
+                buttonText.textContent = 'GENERATE HCGCC STRATEGIC ASSESSMENT';
+                spinner.classList.add('hidden');
+            }
+        };
+    </script>
+</body>
+</html>
